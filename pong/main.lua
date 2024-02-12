@@ -113,6 +113,9 @@ function love.load()
 	
 	-- value to make the cpu paddle smoother
 	smoothing_factor = 0.1
+	
+	-- value to add a reaction time to cpu Player
+	reaction_time = 0.01
 
     -- the state of our game; can be any of the following:
     -- 1. 'start' (the beginning of the game, before first serve)
@@ -263,8 +266,13 @@ function love.update(dt)
 		if ball.dy ~= 0 and gameState == 'play' then
 			-- target position for cpu player
 			local target_pos = ball.y - player2.height /2
+			-- find position difference between ball and Paddle
+			pos_diff = target_pos - player2.y
+			-- calculate reation delay I learned a bit about linear interpolation
+			-- in this exercise!
+			reaction_delay = math.min(1, love.timer.getDelta() / reaction_time)
 			-- cpu movement
-			player2.y = player2.y + (target_pos - player2.y) * smoothing_factor
+			player2.y = player2.y + pos_diff * smoothing_factor * reaction_delay
 		end
 	end
 			
