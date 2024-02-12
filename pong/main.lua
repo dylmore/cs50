@@ -107,6 +107,12 @@ function love.load()
     -- player who won the game; not set to a proper value until we reach
     -- that state in the game
     winningPlayer = 0
+	
+	-- flag for cpu Player
+	cpu_player = true
+	
+	-- value to make the cpu paddle smoother
+	smoothing_factor = 0.1
 
     -- the state of our game; can be any of the following:
     -- 1. 'start' (the beginning of the game, before first serve)
@@ -250,15 +256,16 @@ function love.update(dt)
         player2.dy = 0
     end
 	
-	if cpu_player
-		if player2.y != ball.y
-			if ball.y > player2.y
-				player2.dy = PADDLE_SPEED
-			elseif ball.y > player2.y
-				player2.dy = -PADDLE_SPEED
-			else
-				 player2.dy = 0
-		 end
+	-- create the cpu player movements and simmulate a 
+	-- randomness for cpu reaction
+	
+	if cpu_player == true then
+		if ball.dy ~= 0 and gameState == 'play' then
+			-- target position for cpu player
+			local target_pos = ball.y - player2.height /2
+			-- cpu movement
+			player2.y = player2.y + (target_pos - player2.y) * smoothing_factor
+		end
 	end
 			
 
@@ -308,7 +315,10 @@ function love.keypressed(key)
                 servingPlayer = 1
             end
         end
-    end
+	-- selection options for toggling 1 or 2 players
+	elseif key == '2' then
+		cpu_player = false
+	end
 end
 
 --[[
@@ -326,7 +336,8 @@ function love.draw()
         -- UI messages
         love.graphics.setFont(smallFont)
         love.graphics.printf('Welcome to Pong!', 0, 10, VIRTUAL_WIDTH, 'center')
-        love.graphics.printf('Press Enter to begin!', 0, 20, VIRTUAL_WIDTH, 'center')
+		love.graphics.printf('Press 2 if there are 2 players otherwise play the computer!', 0, 20, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Press Enter to begin!', 0, 30, VIRTUAL_WIDTH, 'center')
     elseif gameState == 'serve' then
         -- UI messages
         love.graphics.setFont(smallFont)
