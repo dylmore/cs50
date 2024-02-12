@@ -3,4 +3,4 @@
 ## Repository for Harvard cs50 course
 
 ### Contents
--- Pong
+- Pong
