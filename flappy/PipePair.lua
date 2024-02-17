@@ -24,7 +24,7 @@ function PipePair:init(y)
     -- randomize gap height between a range
     self.pipes = {
         ['upper'] = Pipe('top', self.y),
-        ['lower'] = Pipe('bottom', self.y + PIPE_HEIGHT + math.random(80, 100))
+        ['lower'] = Pipe('bottom', self.y + PIPE_HEIGHT + math.random(90, 120))
     }
 
     -- whether this pipe pair is ready to be removed from the scene
